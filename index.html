@@ -7,39 +7,85 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #f8f9fa;
             color: #333;
+            overflow-x: hidden;
         }
         .header-bg {
             background: linear-gradient(135deg, #ff7f00 0%, #ff5500 100%);
         }
         .candidate-card {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease-in-out;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
         .candidate-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
         .quote {
             border-left: 4px solid #ff7f00;
             font-style: italic;
+            transition: all 0.3s ease;
+        }
+        .quote:hover {
+            background-color: #fff9f0;
+            transform: translateX(5px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .btn-vote {
             background: linear-gradient(to right, #ff7f00, #ff5500);
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            position: relative;
+            overflow: hidden;
         }
         .btn-vote:hover {
             transform: scale(1.05);
             box-shadow: 0 10px 15px -3px rgba(255, 127, 0, 0.4);
         }
+        .btn-vote::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        .btn-vote:hover::before {
+            left: 100%;
+        }
         .manifesto {
             line-height: 1.8;
         }
         .candidate-img {
-            border: 3px solid #ff7f00;
+            border: 4px solid #ff7f00;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .candidate-img:hover {
+            transform: scale(1.05);
+            border-color: #ff5500;
+            box-shadow: 0 10px 25px -5px rgba(255, 127, 0, 0.4);
+        }
+        .candidate-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 70%, rgba(255, 127, 0, 0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .candidate-img:hover::after {
+            opacity: 1;
         }
         .section-title {
             position: relative;
@@ -52,25 +98,276 @@
             width: 50px;
             height: 4px;
             background-color: #ff7f00;
+            transition: width 0.4s ease;
+        }
+        .section-title:hover:after {
+            width: 100px;
+        }
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .skill-badge {
+            transition: all 0.3s ease;
+        }
+        .skill-badge:hover {
+            transform: scale(1.1);
+        }
+        .timeline-item {
+            transition: all 0.4s ease;
+        }
+        .timeline-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: translateY(-3px) rotate(8deg);
+        }
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .pulse-badge {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        .rotate-bg {
+            animation: rotate 80s linear infinite;
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-15px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-7px) translateX(-50%);
+            }
+        }
+        .ticker-tape {
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(255, 127, 0, 0.1);
+            padding: 10px 0;
+        }
+        .ticker-content {
+            white-space: nowrap;
+            animation: ticker 30s linear infinite;
+        }
+        @keyframes ticker {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        .progress-container {
+            width: 100%;
+            height: 5px;
+            background: transparent;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .progress-bar {
+            height: 5px;
+            background: linear-gradient(to right, #ff7f00, #ff5500);
+            width: 0%;
+        }
+        .counter {
+            animation: count 3s ease-out forwards;
+        }
+        @keyframes count {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #ff7f00, #ff5500);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        .scroll-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .scroll-to-top:hover {
+            transform: scale(1.1);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #ff7f00, #ff5500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .vote-count {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff7f00;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
 <body class="min-h-screen">
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 header-bg text-white py-4 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-xl font-bold">USIU Scholar Council</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link font-medium">Home</a>
+                    <a href="#candidates" class="nav-link font-medium">Candidates</a>
+                    <a href="#timeline" class="nav-link font-medium">Timeline</a>
+                    <a href="#vote" class="nav-link font-medium">Vote</a>
+                    <a href="#contact" class="nav-link font-medium">Contact</a>
+                </div>
+                <button class="md:hidden text-white focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Nav (Hidden by default) -->
+    <div class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col justify-center items-center" id="mobileNav">
+        <button class="absolute top-5 right-5 text-white focus:outline-none">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        <div class="flex flex-col space-y-6 items-center">
+            <a href="#home" class="text-white text-2xl nav-link">Home</a>
+            <a href="#candidates" class="text-white text-2xl nav-link">Candidates</a>
+            <a href="#timeline" class="text-white text-2xl nav-link">Timeline</a>
+            <a href="#vote" class="text-white text-2xl nav-link">Vote</a>
+            <a href="#contact" class="text-white text-2xl nav-link">Contact</a>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
     <!-- Header Section -->
-    <header class="header-bg text-white py-12 px-4 md:px-0">
-        <div class="container mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4">MCF USIU Africa Scholar Council</h1>
-            <h2 class="text-2xl md:text-3xl font-light mb-6">VOICE OF SCHOLARS</h2>
-            <h2 class="text-2xl md:text-3xl font-light mb-6">Campaign 2025-2026</h2>
-            <p class="text-xl md:w-2/3 mx-auto">Your Voice. Your Leadership. Your Future.</p>
+    <header id="home" class="header-bg text-white pt-32 pb-20 px-4 md:px-0 relative">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+            <div class="rotate-bg absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 opacity-10 rounded-full"></div>
+            <div class="rotate-bg absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-orange-600 to-red-500 opacity-10 rounded-full" style="animation-direction: reverse;"></div>
+        </div>
+        <div class="container mx-auto text-center relative z-10" data-aos="fade-up" data-aos-duration="1000">
+            <h1 class="text-4xl md:text-7xl font-bold mb-4">USIU Africa Scholar Council</h1>
+            <h2 class="text-2xl md:text-3xl font-light mb-8">Campaign 2023-2024</h2>
+            <p class="text-xl md:text-2xl md:w-2/3 mx-auto mb-12">Your Voice. Your Leadership. Your Future.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#candidates" class="bg-white text-orange-500 font-bold py-3 px-8 rounded-full transition-all duration-300 hover:bg-orange-100 hover:shadow-lg transform hover:scale-105">
+                    Meet Candidates <i class="fas fa-users ml-2"></i>
+                </a>
+                <a href="#vote" class="border-2 border-white text-white font-bold py-3 px-8 rounded-full transition-all duration-300 hover:bg-white hover:text-orange-500 hover:shadow-lg transform hover:scale-105">
+                    Vote Now <i class="fas fa-vote-yea ml-2"></i>
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-angle-down text-white text-3xl"></i>
         </div>
     </header>
 
+    <!-- Ticker Tape -->
+    <div class="ticker-tape py-3">
+        <div class="ticker-content text-orange-600 font-medium text-lg">
+            🗓️ Election Day: November 15th, 2023 &nbsp;&nbsp;|&nbsp;&nbsp; 📢 Candidate Debate: November 10th &nbsp;&nbsp;|&nbsp;&nbsp; 
+            🎓 Make Your Voice Count &nbsp;&nbsp;|&nbsp;&nbsp; 📈 Over 2,000 students expected to vote &nbsp;&nbsp;|&nbsp;&nbsp; 
+            🏆 Six positions open for election &nbsp;&nbsp;|&nbsp;&nbsp; 📋 Register to vote at the Student Center &nbsp;&nbsp;|&nbsp;&nbsp;
+            📱 Follow the campaign on social media with #USIUvotes2023
+        </div>
+    </div>
+
     <!-- Introduction -->
-    <section class="bg-white py-12">
+    <section class="bg-white py-16">
         <div class="container mx-auto px-4 md:px-12">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Shape the Future of USIU Africa</h2>
+            <div class="text-center mb-12" data-aos="fade-up" data-aos-duration="800">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Shape the Future of USIU Africa</h2>
                 <p class="text-lg text-gray-600 md:w-3/4 mx-auto">
                     The Scholar Council represents the student body, advocating for your interests and 
                     enhancing your university experience. Meet our dedicated candidates who are ready 
@@ -78,39 +375,263 @@
                 </p>
             </div>
             
+            <div class="flex flex-wrap justify-center gap-6 mb-12">
+                <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center mb-3">
+                        <i class="fas fa-users text-orange-500 text-3xl"></i>
+                    </div>
+                    <span class="counter font-bold text-4xl text-orange-500">3500+</span>
+                    <span class="text-gray-600">Students Represented</span>
+                </div>
+                <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center mb-3">
+                        <i class="fas fa-calendar-check text-purple-500 text-3xl"></i>
+                    </div>
+                    <span class="counter font-bold text-4xl text-purple-500">24+</span>
+                    <span class="text-gray-600">Events Annually</span>
+                </div>
+                <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-3">
+                        <i class="fas fa-hand-holding-usd text-green-500 text-3xl"></i>
+                    </div>
+                    <span class="counter font-bold text-4xl text-green-500">$50k+</span>
+                    <span class="text-gray-600">Budget Managed</span>
+                </div>
+                <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-3">
+                        <i class="fas fa-project-diagram text-blue-500 text-3xl"></i>
+                    </div>
+                    <span class="counter font-bold text-4xl text-blue-500">15+</span>
+                    <span class="text-gray-600">Student Initiatives</span>
+                </div>
+            </div>
+            
             <div class="w-full h-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 my-8 rounded-full"></div>
         </div>
     </section>
 
-    <!-- President -->
-    <section class="py-16 bg-gray-50">
+    <!-- Candidates Section Header -->
+    <section id="candidates" class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4 md:px-12 text-center">
+            <h2 class="text-4xl font-bold mb-6 gradient-text inline-block" data-aos="fade-up">Meet Your Candidates</h2>
+            <p class="text-lg text-gray-600 mb-12 md:w-3/4 mx-auto" data-aos="fade-up" data-aos-delay="100">
+                Our diverse team of passionate leaders is ready to represent you and drive positive change on campus.
+                Each candidate brings unique skills and perspectives to create a more inclusive, vibrant USIU-Africa.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                <!-- President Card -->
+                <div class="candidate-card bg-white rounded-xl overflow-hidden" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Alex Mwangi" class="w-full h-64 object-cover">
+                        <div class="absolute top-0 left-0 bg-orange-500 text-white px-4 py-2 rounded-br-lg">
+                            <i class="fas fa-crown mr-1"></i> President
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">Alex Mwangi</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            Bridging the gap between students and administration for a more transparent, inclusive campus.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="#president" class="text-orange-500 hover:text-orange-700 font-medium">
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <div class="flex space-x-2">
+                                <a href="#" class="text-gray-400 hover:text-orange-500 social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-orange-500 social-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vice President Card -->
+                <div class="candidate-card bg-white rounded-xl overflow-hidden" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Sarah Njeri" class="w-full h-64 object-cover">
+                        <div class="absolute top-0 left-0 bg-purple-500 text-white px-4 py-2 rounded-br-lg">
+                            <i class="fas fa-user-tie mr-1"></i> Vice President
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">Sarah Njeri</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            Building a united student body through effective communication and teamwork.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="#vice-president" class="text-purple-500 hover:text-purple-700 font-medium">
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <div class="flex space-x-2">
+                                <a href="#" class="text-gray-400 hover:text-purple-500 social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-purple-500 social-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Finance Officer Card -->
+                <div class="candidate-card bg-white rounded-xl overflow-hidden" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="David Kimani" class="w-full h-64 object-cover">
+                        <div class="absolute top-0 left-0 bg-green-500 text-white px-4 py-2 rounded-br-lg">
+                            <i class="fas fa-money-bill-wave mr-1"></i> Finance Officer
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">David Kimani</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            Managing resources with transparency to empower student initiatives and welfare.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="#finance-officer" class="text-green-500 hover:text-green-700 font-medium">
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <div class="flex space-x-2">
+                                <a href="#" class="text-gray-400 hover:text-green-500 social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-green-500 social-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Inclusion Representative Card -->
+                <div class="candidate-card bg-white rounded-xl overflow-hidden" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Amina Hassan" class="w-full h-64 object-cover">
+                        <div class="absolute top-0 left-0 bg-blue-500 text-white px-4 py-2 rounded-br-lg">
+                            <i class="fas fa-users-cog mr-1"></i> Inclusion Rep
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">Amina Hassan</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            Creating an inclusive campus where diversity is celebrated and everyone belongs.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="#inclusion-representative" class="text-blue-500 hover:text-blue-700 font-medium">
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <div class="flex space-x-2">
+                                <a href="#" class="text-gray-400 hover:text-blue-500 social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-blue-500 social-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Scholar Support Card -->
+                <div class="candidate-card bg-white rounded-xl overflow-hidden" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="James Ochieng" class="w-full h-64 object-cover">
+                        <div class="absolute top-0 left-0 bg-pink-500 text-white px-4 py-2 rounded-br-lg">
+                            <i class="fas fa-graduation-cap mr-1"></i> Scholar Support
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">James Ochieng</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            Advocating for academic resources and support systems to enhance student success.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="#scholar-support" class="text-pink-500 hover:text-pink-700 font-medium">
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <div class="flex space-x-2">
+                                <a href="#" class="text-gray-400 hover:text-pink-500 social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-pink-500 social-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Community Service Card -->
+                <div class="candidate-card bg-white rounded-xl overflow-hidden" data-aos="zoom-in" data-aos-delay="600">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Grace Mutua" class="w-full h-64 object-cover">
+                        <div class="absolute top-0 left-0 bg-yellow-500 text-white px-4 py-2 rounded-br-lg">
+                            <i class="fas fa-hands-helping mr-1"></i> Community Service
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">Grace Mutua</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            Building bridges between USIU and the wider community through impactful service initiatives.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="#community-service" class="text-yellow-600 hover:text-yellow-700 font-medium">
+                                Read More <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <div class="flex space-x-2">
+                                <a href="#" class="text-gray-400 hover:text-yellow-500 social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-yellow-500 social-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- President Details -->
+    <section id="president" class="py-20 bg-gray-50 border-t border-gray-200">
         <div class="container mx-auto px-4 md:px-12">
             <div class="flex flex-wrap items-center">
-                <div class="w-full md:w-1/3 mb-8 md:mb-0">
+                <div class="w-full md:w-1/3 mb-8 md:mb-0" data-aos="fade-right">
                     <div class="text-center">
                         <div class="relative inline-block">
                             <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img">
                                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Alex Mwangi" class="w-full h-full object-cover">
                             </div>
-                            <div class="absolute -bottom-2 -right-2 bg-orange-500 text-white text-sm font-bold px-4 py-2 rounded-full">
+                            <div class="absolute -bottom-2 -right-2 bg-orange-500 text-white text-sm font-bold px-4 py-2 rounded-full pulse-badge">
                                 President
                             </div>
                         </div>
-                        <h3 class="text-3xl font-bold mt-6 text-gray-800">Asafu Mamlaka Etandala</h3>
+                        <h3 class="text-3xl font-bold mt-6 text-gray-800">Alex Mwangi</h3>
                         <div class="flex justify-center space-x-3 mt-4">
-                            <a href="#" class="text-orange-500 hover:text-orange-700">
+                            <a href="#" class="text-orange-500 hover:text-orange-700 social-icon">
                                 <i class="fab fa-twitter fa-lg"></i>
                             </a>
-                            <a href="#" class="text-orange-500 hover:text-orange-700">
+                            <a href="#" class="text-orange-500 hover:text-orange-700 social-icon">
                                 <i class="fab fa-instagram fa-lg"></i>
                             </a>
-                            <a href="#" class="text-orange-500 hover:text-orange-700">
+                            <a href="#" class="text-orange-500 hover:text-orange-700 social-icon">
                                 <i class="fab fa-linkedin fa-lg"></i>
                             </a>
                         </div>
+                        <div class="mt-6">
+                            <div class="vote-count mb-2" id="alexVotes">0</div>
+                            <button onclick="vote('alexVotes')" class="btn-vote text-white font-bold py-3 px-8 rounded-full">
+                                Vote for Alex <i class="fas fa-vote-yea ml-2"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="w-full md:w-2/3">
+                <div class="w-full md:w-2/3" data-aos="fade-left">
                     <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title">Manifesto</h3>
                     <p class="manifesto text-gray-600 mb-6">
                         As your Scholar Council President, I envision a vibrant USIU-Africa where every student's voice shapes our future. 
@@ -123,58 +644,77 @@
                     <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6">
                         "The function of leadership is to produce more leaders, not more followers." – Ralph Nader
                     </div>
+                    <h4 class="text-xl font-semibold mb-4 text-gray-700">Key Initiatives:</h4>
                     <div class="flex flex-wrap gap-4 mb-6">
-                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Transparency
                         </div>
-                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Academic Excellence
                         </div>
-                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Mental Health Support
                         </div>
-                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Inclusive Campus
                         </div>
+                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Student-Admin Bridge
+                        </div>
+                        <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Career Development
+                        </div>
                     </div>
-                    <button class="btn-vote text-white font-bold py-3 px-8 rounded-full mt-4">
-                        Vote for Alex <i class="fas fa-vote-yea ml-2"></i>
-                    </button>
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h4 class="text-lg font-semibold mb-3 text-gray-700">Experience & Qualifications</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li><i class="fas fa-angle-right text-orange-500 mr-2"></i> Class Representative (2021-2022)</li>
+                            <li><i class="fas fa-angle-right text-orange-500 mr-2"></i> Member of Student Affairs Committee</li>
+                            <li><i class="fas fa-angle-right text-orange-500 mr-2"></i> Leadership & Management Training</li>
+                            <li><i class="fas fa-angle-right text-orange-500 mr-2"></i> Dean's List Student</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Vice President -->
-    <section class="py-16 bg-white">
+    <!-- Vice President Details -->
+    <section id="vice-president" class="py-20 bg-white border-t border-gray-200">
         <div class="container mx-auto px-4 md:px-12">
             <div class="flex flex-wrap items-center flex-row-reverse">
-                <div class="w-full md:w-1/3 mb-8 md:mb-0">
+                <div class="w-full md:w-1/3 mb-8 md:mb-0" data-aos="fade-left">
                     <div class="text-center">
                         <div class="relative inline-block">
-                            <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img">
+                            <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img" style="border-color: #9333ea;">
                                 <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Sarah Njeri" class="w-full h-full object-cover">
                             </div>
-                            <div class="absolute -bottom-2 -left-2 bg-purple-500 text-white text-sm font-bold px-4 py-2 rounded-full">
+                            <div class="absolute -bottom-2 -left-2 bg-purple-500 text-white text-sm font-bold px-4 py-2 rounded-full pulse-badge">
                                 Vice President
                             </div>
                         </div>
-                        <h3 class="text-3xl font-bold mt-6 text-gray-800">Rencia Seda</h3>
+                        <h3 class="text-3xl font-bold mt-6 text-gray-800">Sarah Njeri</h3>
                         <div class="flex justify-center space-x-3 mt-4">
-                            <a href="#" class="text-purple-500 hover:text-purple-700">
+                            <a href="#" class="text-purple-500 hover:text-purple-700 social-icon">
                                 <i class="fab fa-twitter fa-lg"></i>
                             </a>
-                            <a href="#" class="text-purple-500 hover:text-purple-700">
+                            <a href="#" class="text-purple-500 hover:text-purple-700 social-icon">
                                 <i class="fab fa-instagram fa-lg"></i>
                             </a>
-                            <a href="#" class="text-purple-500 hover:text-purple-700">
+                            <a href="#" class="text-purple-500 hover:text-purple-700 social-icon">
                                 <i class="fab fa-linkedin fa-lg"></i>
                             </a>
                         </div>
+                        <div class="mt-6">
+                            <div class="vote-count mb-2" id="sarahVotes" style="color: #9333ea;">0</div>
+                            <button onclick="vote('sarahVotes')" class="bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg transition duration-300">
+                                Vote for Sarah <i class="fas fa-vote-yea ml-2"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="w-full md:w-2/3">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title">Manifesto</h3>
+                <div class="w-full md:w-2/3" data-aos="fade-right">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title" style="color: #9333ea;">Manifesto</h3>
                     <p class="manifesto text-gray-600 mb-6">
                         I'm Sarah Njeri, running for Vice President to support and amplify the President's vision while ensuring every student feels heard. 
                         My focus is on teamwork—building a council that listens, acts, and delivers. I'll organize forums to gather your ideas, 
@@ -182,61 +722,80 @@
                         I'll ensure smooth operations and step up whenever needed. Let's make USIU-Africa a campus where every dream is supported, 
                         and every voice matters. Vote Sarah for a united future!
                     </p>
-                    <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6">
+                    <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6" style="border-color: #9333ea;">
                         "Alone we can do so little; together we can do so much." – Helen Keller
                     </div>
+                    <h4 class="text-xl font-semibold mb-4 text-gray-700">Key Initiatives:</h4>
                     <div class="flex flex-wrap gap-4 mb-6">
-                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Team Building
                         </div>
-                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Effective Communication
                         </div>
-                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Student Forums
                         </div>
-                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Club Support
                         </div>
+                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Event Organization
+                        </div>
+                        <div class="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Conflict Resolution
+                        </div>
                     </div>
-                    <button class="bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg transition duration-300 mt-4">
-                        Vote for Sarah <i class="fas fa-vote-yea ml-2"></i>
-                    </button>
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h4 class="text-lg font-semibold mb-3 text-gray-700">Experience & Qualifications</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li><i class="fas fa-angle-right text-purple-500 mr-2"></i> Club President, Public Speaking Society</li>
+                            <li><i class="fas fa-angle-right text-purple-500 mr-2"></i> Student Ambassador Program</li>
+                            <li><i class="fas fa-angle-right text-purple-500 mr-2"></i> Event Management Certificate</li>
+                            <li><i class="fas fa-angle-right text-purple-500 mr-2"></i> Peer Counselor</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Finance Officer -->
-    <section class="py-16 bg-gray-50">
+    <!-- Finance Officer Details -->
+    <section id="finance-officer" class="py-20 bg-gray-50 border-t border-gray-200">
         <div class="container mx-auto px-4 md:px-12">
             <div class="flex flex-wrap items-center">
-                <div class="w-full md:w-1/3 mb-8 md:mb-0">
+                <div class="w-full md:w-1/3 mb-8 md:mb-0" data-aos="fade-right">
                     <div class="text-center">
                         <div class="relative inline-block">
-                            <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img">
+                            <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img" style="border-color: #22c55e;">
                                 <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="David Kimani" class="w-full h-full object-cover">
                             </div>
-                            <div class="absolute -bottom-2 -right-2 bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-full">
+                            <div class="absolute -bottom-2 -right-2 bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-full pulse-badge">
                                 Finance Officer
                             </div>
                         </div>
-                        <h3 class="text-3xl font-bold mt-6 text-gray-800">Jaili Abdalla</h3>
+                        <h3 class="text-3xl font-bold mt-6 text-gray-800">David Kimani</h3>
                         <div class="flex justify-center space-x-3 mt-4">
-                            <a href="#" class="text-green-500 hover:text-green-700">
+                            <a href="#" class="text-green-500 hover:text-green-700 social-icon">
                                 <i class="fab fa-twitter fa-lg"></i>
                             </a>
-                            <a href="#" class="text-green-500 hover:text-green-700">
+                            <a href="#" class="text-green-500 hover:text-green-700 social-icon">
                                 <i class="fab fa-instagram fa-lg"></i>
                             </a>
-                            <a href="#" class="text-green-500 hover:text-green-700">
+                            <a href="#" class="text-green-500 hover:text-green-700 social-icon">
                                 <i class="fab fa-linkedin fa-lg"></i>
                             </a>
                         </div>
+                        <div class="mt-6">
+                            <div class="vote-count mb-2" id="davidVotes" style="color: #22c55e;">0</div>
+                            <button onclick="vote('davidVotes')" class="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg transition duration-300">
+                                Vote for David <i class="fas fa-vote-yea ml-2"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="w-full md:w-2/3">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title">Manifesto</h3>
+                <div class="w-full md:w-2/3" data-aos="fade-left">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title" style="color: #22c55e;">Manifesto</h3>
                     <p class="manifesto text-gray-600 mb-6">
                         I'm David Kimani, your candidate for Finance Officer. I believe in responsible stewardship to make every shilling count for you. 
                         My plan is to manage the council's budget transparently, ensuring funds empower student projects, events, and welfare programs. 
@@ -244,61 +803,80 @@
                         With my background in budgeting and attention to detail, I'll safeguard your resources while fueling innovation. 
                         Vote David Kimani for a financially empowered USIU-Africa!
                     </p>
-                    <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6">
+                    <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6" style="border-color: #22c55e;">
                         "A budget is telling your money where to go instead of wondering where it went." – Dave Ramsey
                     </div>
+                    <h4 class="text-xl font-semibold mb-4 text-gray-700">Key Initiatives:</h4>
                     <div class="flex flex-wrap gap-4 mb-6">
-                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Transparent Budget
                         </div>
-                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Financial Literacy
                         </div>
-                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Affordable Services
                         </div>
-                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Resource Management
                         </div>
+                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Project Funding
+                        </div>
+                        <div class="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Budget Reporting
+                        </div>
                     </div>
-                    <button class="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg transition duration-300 mt-4">
-                        Vote for David <i class="fas fa-vote-yea ml-2"></i>
-                    </button>
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h4 class="text-lg font-semibold mb-3 text-gray-700">Experience & Qualifications</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li><i class="fas fa-angle-right text-green-500 mr-2"></i> Treasurer, Business Club</li>
+                            <li><i class="fas fa-angle-right text-green-500 mr-2"></i> Finance Major with 3.8 GPA</li>
+                            <li><i class="fas fa-angle-right text-green-500 mr-2"></i> Internship at Local Bank</li>
+                            <li><i class="fas fa-angle-right text-green-500 mr-2"></i> Financial Analysis Certificate</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Inclusion Representative -->
-    <section class="py-16 bg-white">
+    <!-- Inclusion Representative Details -->
+    <section id="inclusion-representative" class="py-20 bg-white border-t border-gray-200">
         <div class="container mx-auto px-4 md:px-12">
             <div class="flex flex-wrap items-center flex-row-reverse">
-                <div class="w-full md:w-1/3 mb-8 md:mb-0">
+                <div class="w-full md:w-1/3 mb-8 md:mb-0" data-aos="fade-left">
                     <div class="text-center">
                         <div class="relative inline-block">
-                            <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img">
+                            <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img" style="border-color: #3b82f6;">
                                 <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Amina Hassan" class="w-full h-full object-cover">
                             </div>
-                            <div class="absolute -bottom-2 -left-2 bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-full">
+                            <div class="absolute -bottom-2 -left-2 bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-full pulse-badge">
                                 Inclusion Rep
                             </div>
                         </div>
                         <h3 class="text-3xl font-bold mt-6 text-gray-800">Amina Hassan</h3>
                         <div class="flex justify-center space-x-3 mt-4">
-                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                            <a href="#" class="text-blue-500 hover:text-blue-700 social-icon">
                                 <i class="fab fa-twitter fa-lg"></i>
                             </a>
-                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                            <a href="#" class="text-blue-500 hover:text-blue-700 social-icon">
                                 <i class="fab fa-instagram fa-lg"></i>
                             </a>
-                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                            <a href="#" class="text-blue-500 hover:text-blue-700 social-icon">
                                 <i class="fab fa-linkedin fa-lg"></i>
                             </a>
                         </div>
+                        <div class="mt-6">
+                            <div class="vote-count mb-2" id="aminaVotes" style="color: #3b82f6;">0</div>
+                            <button onclick="vote('aminaVotes')" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg transition duration-300">
+                                Vote for Amina <i class="fas fa-vote-yea ml-2"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="w-full md:w-2/3">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title">Manifesto</h3>
+                <div class="w-full md:w-2/3" data-aos="fade-right">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title" style="color: #3b82f6;">Manifesto</h3>
                     <p class="manifesto text-gray-600 mb-6">
                         I'm Amina Hassan, running for Inclusion Representative to ensure USIU-Africa is a home for everyone—regardless of background, 
                         ability, or identity. My goal is to create spaces where all students feel valued, from accessible facilities to cultural 
@@ -306,48 +884,238 @@
                         foster understanding. With empathy and determination, I'll work tirelessly to make inclusion our strength. 
                         Vote Amina for a campus where everyone belongs!
                     </p>
-                    <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6">
+                    <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6" style="border-color: #3b82f6;">
                         "Diversity is being invited to the party; inclusion is being asked to dance." – Verna Myers
                     </div>
+                    <h4 class="text-xl font-semibold mb-4 text-gray-700">Key Initiatives:</h4>
                     <div class="flex flex-wrap gap-4 mb-6">
-                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Inclusive Spaces
                         </div>
-                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Cultural Celebration
                         </div>
-                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Diversity Dialogues
                         </div>
-                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium">
+                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
                             <i class="fas fa-check-circle mr-1"></i> Accessibility
                         </div>
+                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> International Student Support
+                        </div>
+                        <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Anti-Discrimination Policy
+                        </div>
                     </div>
-                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg transition duration-300 mt-4">
-                        Vote for Amina <i class="fas fa-vote-yea ml-2"></i>
-                    </button>
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h4 class="text-lg font-semibold mb-3 text-gray-700">Experience & Qualifications</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li><i class="fas fa-angle-right text-blue-500 mr-2"></i> Cultural Diversity Club Leader</li>
+                            <li><i class="fas fa-angle-right text-blue-500 mr-2"></i> Volunteer, Disability Support Services</li>
+                            <li><i class="fas fa-angle-right text-blue-500 mr-2"></i> Diversity & Inclusion Workshop Facilitator</li>
+                            <li><i class="fas fa-angle-right text-blue-500 mr-2"></i> Multilingual (English, Swahili, Arabic)</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Call to Action -->
-    <section class="header-bg text-white py-20 px-4">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-8">Your Vote. Your Voice. Your USIU-Africa.</h2>
-            <p class="text-xl mb-12 md:w-2/3 mx-auto">
+    <!-- Scholar Support Details -->
+    <section id="scholar-support" class="py-20 bg-gray-50 border-t border-gray-200">
+        <div class="container mx-auto px-4 md:px-12">
+            <div class="flex flex-wrap items-center">
+                <div class="w-full md:w-1/3 mb-8 md:mb-0" data-aos="fade-right">
+                    <div class="text-center">
+                        <div class="relative inline-block">
+                            <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img" style="border-color: #ec4899;">
+                                <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="James Ochieng" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute -bottom-2 -right-2 bg-pink-500 text-white text-sm font-bold px-4 py-2 rounded-full pulse-badge">
+                                Scholar Support
+                            </div>
+                        </div>
+                        <h3 class="text-3xl font-bold mt-6 text-gray-800">James Ochieng</h3>
+                        <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-pink-500 hover:text-pink-700 social-icon">
+                                <i class="fab fa-twitter fa-lg"></i>
+                            </a>
+                            <a href="#" class="text-pink-500 hover:text-pink-700 social-icon">
+                                <i class="fab fa-instagram fa-lg"></i>
+                            </a>
+                            <a href="#" class="text-pink-500 hover:text-pink-700 social-icon">
+                                <i class="fab fa-linkedin fa-lg"></i>
+                            </a>
+                        </div>
+                        <div class="mt-6">
+                            <div class="vote-count mb-2" id="jamesVotes" style="color: #ec4899;">0</div>
+                            <button onclick="vote('jamesVotes')" class="bg-gradient-to-r from-pink-500 to-pink-700 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg transition duration-300">
+                                Vote for James <i class="fas fa-vote-yea ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-2/3" data-aos="fade-left">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title" style="color: #ec4899;">Manifesto</h3>
+                    <p class="manifesto text-gray-600 mb-6">
+                        As your Scholar Support Officer, I, James Ochieng, am committed to enhancing the academic experience of every USIU-Africa student. 
+                        I will advocate for expanded library resources, more versatile study spaces, and extended academic support hours. 
+                        I plan to establish peer tutoring networks across all faculties and push for technology upgrades in classrooms and labs. 
+                        Additionally, I'll work to create more research opportunities and facilitate stronger connections with industry professionals. 
+                        My goal is to ensure every student has the resources they need to excel academically and professionally.
+                        Vote for James—your advocate for academic excellence!
+                    </p>
+                    <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6" style="border-color: #ec4899;">
+                        "Education is the most powerful weapon which you can use to change the world." – Nelson Mandela
+                    </div>
+                    <h4 class="text-xl font-semibold mb-4 text-gray-700">Key Initiatives:</h4>
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <div class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Library Resources
+                        </div>
+                        <div class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Peer Tutoring
+                        </div>
+                        <div class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Study Spaces
+                        </div>
+                        <div class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Tech Upgrades
+                        </div>
+                        <div class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Research Opportunities
+                        </div>
+                        <div class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Academic Support
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h4 class="text-lg font-semibold mb-3 text-gray-700">Experience & Qualifications</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li><i class="fas fa-angle-right text-pink-500 mr-2"></i> Teaching Assistant, Computer Science</li>
+                            <li><i class="fas fa-angle-right text-pink-500 mr-2"></i> Library Student Committee Member</li>
+                            <li><i class="fas fa-angle-right text-pink-500 mr-2"></i> Academic Excellence Award Recipient</li>
+                            <li><i class="fas fa-angle-right text-pink-500 mr-2"></i> Peer Tutor for 2 Years</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Service Details -->
+    <section id="community-service" class="py-20 bg-white border-t border-gray-200">
+        <div class="container mx-auto px-4 md:px-12">
+            <div class="flex flex-wrap items-center flex-row-reverse">
+                <div class="w-full md:w-1/3 mb-8 md:mb-0" data-aos="fade-left">
+                    <div class="text-center">
+                        <div class="relative inline-block">
+                            <div class="w-64 h-64 mx-auto rounded-full overflow-hidden candidate-img" style="border-color: #eab308;">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Grace Mutua" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute -bottom-2 -left-2 bg-yellow-500 text-white text-sm font-bold px-4 py-2 rounded-full pulse-badge">
+                                Community Service
+                            </div>
+                        </div>
+                        <h3 class="text-3xl font-bold mt-6 text-gray-800">Grace Mutua</h3>
+                        <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-yellow-600 hover:text-yellow-700 social-icon">
+                                <i class="fab fa-twitter fa-lg"></i>
+                            </a>
+                            <a href="#" class="text-yellow-600 hover:text-yellow-700 social-icon">
+                                <i class="fab fa-instagram fa-lg"></i>
+                            </a>
+                            <a href="#" class="text-yellow-600 hover:text-yellow-700 social-icon">
+                                <i class="fab fa-linkedin fa-lg"></i>
+                            </a>
+                        </div>
+                        <div class="mt-6">
+                            <div class="vote-count mb-2" id="graceVotes" style="color: #eab308;">0</div>
+                            <button onclick="vote('graceVotes')" class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg transition duration-300">
+                                Vote for Grace <i class="fas fa-vote-yea ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-2/3" data-aos="fade-right">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 section-title" style="color: #eab308;">Manifesto</h3>
+                    <p class="manifesto text-gray-600 mb-6">
+                        I'm Grace Mutua, your candidate for Community Service Representative. I believe in the power of giving back and creating 
+                        meaningful connections between USIU-Africa and the wider community. My goal is to establish regular service opportunities 
+                        that allow students to contribute while developing valuable skills and perspective. I'll organize environmental cleanup initiatives, 
+                        educational outreach programs, and partnerships with local organizations to address community needs. Through these efforts, 
+                        we'll strengthen our university's reputation as a socially responsible institution while enriching our own educational experience. 
+                        Vote Grace for a campus that makes a positive difference beyond our walls!
+                    </p>
+                    <div class="quote px-6 py-4 bg-gray-100 text-gray-700 rounded mb-6" style="border-color: #eab308;">
+                        "The best way to find yourself is to lose yourself in the service of others." – Mahatma Gandhi
+                    </div>
+                    <h4 class="text-xl font-semibold mb-4 text-gray-700">Key Initiatives:</h4>
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <div class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Service Opportunities
+                        </div>
+                        <div class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Environmental Initiatives
+                        </div>
+                        <div class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Community Partnerships
+                        </div>
+                        <div class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Educational Outreach
+                        </div>
+                        <div class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Service Learning
+                        </div>
+                        <div class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-full text-sm font-medium skill-badge">
+                            <i class="fas fa-check-circle mr-1"></i> Volunteer Coordination
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h4 class="text-lg font-semibold mb-3 text-gray-700">Experience & Qualifications</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li><i class="fas fa-angle-right text-yellow-500 mr-2"></i> Community Outreach Coordinator</li>
+                            <li><i class="fas fa-angle-right text-yellow-500 mr-2"></i> 500+ Volunteer Hours</li>
+                            <li><i class="fas fa-angle-right text-yellow-500 mr-2"></i> Led 3 Major Service Projects</li>
+                            <li><i class="fas fa-angle-right text-yellow-500 mr-2"></i> Certificate in Nonprofit Management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vote Banner -->
+    <section id="vote" class="relative py-20 bg-gray-800 overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500"></div>
+            <div class="w-full h-full" style="background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; mix-blend-mode: overlay;"></div>
+        </div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-8" data-aos="zoom-in">Your Vote Makes a Difference</h2>
+            <p class="text-xl text-white md:w-2/3 mx-auto mb-12" data-aos="fade-up" data-aos-delay="100">
                 Elections will be held on November 15th, 2023. Every vote counts toward building the USIU-Africa we all deserve.
+                Make sure your voice is heard!
             </p>
-            <button class="bg-white text-orange-500 font-bold text-xl py-4 px-10 rounded-full hover:bg-gray-100 transition duration-300">
-                Register to Vote Now <i class="fas fa-arrow-right ml-2"></i>
-            </button>
+            <div class="flex flex-wrap justify-center gap-6" data-aos="fade-up" data-aos-delay="200">
+                <button class="bg-white text-orange-500 font-bold text-xl py-4 px-10 rounded-full hover:bg-gray-100 transition duration-300 transform hover:scale-105">
+                    Register to Vote Now <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <button class="border-2 border-white text-white font-bold text-xl py-4 px-10 rounded-full hover:bg-white hover:text-orange-500 transition duration-300 transform hover:scale-105">
+                    Learn More <i class="fas fa-info-circle ml-2"></i>
+                </button>
+            </div>
         </div>
     </section>
 
     <!-- Timeline -->
-    <section class="py-16 bg-white">
+    <section id="timeline" class="py-20 bg-white">
         <div class="container mx-auto px-4 md:px-12">
-            <h2 class="text-3xl font-bold text-center mb-12">Election Timeline</h2>
+            <h2 class="text-3xl font-bold text-center mb-4 gradient-text inline-block" data-aos="fade-up">Election Timeline</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 md:w-2/3 mx-auto" data-aos="fade-up" data-aos-delay="100">
+                Mark your calendar for these important election events and make sure your voice is heard.
+            </p>
             
             <div class="relative">
                 <!-- Timeline Line -->
@@ -356,38 +1124,239 @@
                 <!-- Timeline Items -->
                 <div class="flex flex-wrap">
                     <!-- Item 1 -->
-                    <div class="w-full md:w-1/2 mb-8 md:pr-12 md:text-right">
-                        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500 md:border-l-0 md:border-r-4">
-                            <h3 class="text-xl font-bold text-orange-500 mb-2">April 16-25, 2025</h3>
+                    <div class="w-full md:w-1/2 mb-8 md:pr-12 md:text-right" data-aos="fade-right">
+                        <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500 md:border-l-0 md:border-r-4">
+                            <h3 class="text-xl font-bold text-orange-500 mb-2">November 1-7, 2023</h3>
                             <p class="text-gray-600">Campaign Period</p>
+                            <p class="text-gray-500 mt-2 text-sm">Meet candidates, attend forums, and learn about their platforms</p>
                         </div>
                     </div>
                     <div class="w-full md:w-1/2 md:pl-12"></div>
                     
                     <!-- Item 2 -->
                     <div class="w-full md:w-1/2 md:pr-12"></div>
-                    <div class="w-full md:w-1/2 mb-8 md:pl-12">
-                        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
-                            <h3 class="text-xl font-bold text-orange-500 mb-2">April 26, 2025</h3>
+                    <div class="w-full md:w-1/2 mb-8 md:pl-12" data-aos="fade-left">
+                        <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
+                            <h3 class="text-xl font-bold text-orange-500 mb-2">November 10, 2023</h3>
                             <p class="text-gray-600">Candidate Debate</p>
+                            <p class="text-gray-500 mt-2 text-sm">7PM at the Main Auditorium - See candidates discuss key issues</p>
                         </div>
                     </div>
                     
                     <!-- Item 3 -->
-                    <div class="w-full md:w-1/2 mb-8 md:pr-12 md:text-right">
-                        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500 md:border-l-0 md:border-r-4">
-                            <h3 class="text-xl font-bold text-orange-500 mb-2">April 27, 2025</h3>
+                    <div class="w-full md:w-1/2 mb-8 md:pr-12 md:text-right" data-aos="fade-right">
+                        <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500 md:border-l-0 md:border-r-4">
+                            <h3 class="text-xl font-bold text-orange-500 mb-2">November 15, 2023</h3>
                             <p class="text-gray-600">Election Day</p>
+                            <p class="text-gray-500 mt-2 text-sm">8AM-5PM at various campus locations and online</p>
                         </div>
                     </div>
                     <div class="w-full md:w-1/2 md:pl-12"></div>
                     
                     <!-- Item 4 -->
                     <div class="w-full md:w-1/2 md:pr-12"></div>
-                    <div class="w-full md:w-1/2 mb-8 md:pl-12">
-                        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
-                            <h3 class="text-xl font-bold text-orange-500 mb-2">April 27, 2025</h3>
+                    <div class="w-full md:w-1/2 mb-8 md:pl-12" data-aos="fade-left">
+                        <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
+                            <h3 class="text-xl font-bold text-orange-500 mb-2">November 16, 2023</h3>
                             <p class="text-gray-600">Results Announcement</p>
+                            <p class="text-gray-500 mt-2 text-sm">12PM at the Student Center and live on USIU Radio</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 5 -->
+                    <div class="w-full md:w-1/2 mb-8 md:pr-12 md:text-right" data-aos="fade-right">
+                        <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500 md:border-l-0 md:border-r-4">
+                            <h3 class="text-xl font-bold text-orange-500 mb-2">November 20, 2023</h3>
+                            <p class="text-gray-600">Inauguration Ceremony</p>
+                            <p class="text-gray-500 mt-2 text-sm">4PM at the Main Hall - Join us to celebrate the new council</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 md:px-12">
+            <h2 class="text-3xl font-bold text-center mb-12 gradient-text inline-block" data-aos="fade-up">Student Voices</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="Student" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Jane Doe</h4>
+                            <p class="text-sm text-gray-500">Senior, Business Administration</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"The Scholar Council has done amazing work improving campus facilities. I'm excited to see what the new leadership will bring!"</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="Student" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">John Smith</h4>
+                            <p class="text-sm text-gray-500">Junior, Computer Science</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Voting in campus elections is our chance to directly influence the university experience. Don't miss this opportunity!"</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="Student" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Mary Johnson</h4>
+                            <p class="text-sm text-gray-500">Sophomore, International Relations</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"The diversity of candidates this year is refreshing! I appreciate seeing different perspectives represented in student leadership."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 md:px-12">
+            <h2 class="text-3xl font-bold text-center mb-12 gradient-text inline-block" data-aos="fade-up">Frequently Asked Questions</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">How do I vote in the election?</h3>
+                    <p class="text-gray-600">You can vote either online through the student portal or in person at designated polling stations across campus. Make sure to bring your student ID.</p>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg" data-aos="fade-up" data-aos-delay="150">
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">When will voting take place?</h3>
+                    <p class="text-gray-600">Voting will be open from 8AM to 5PM on November 15th, 2023. Results will be announced the following day.</p>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Can I meet the candidates in person?</h3>
+                    <p class="text-gray-600">Yes! Candidates will be holding meet-and-greet sessions throughout the campaign period. Check the events calendar for specific times and locations.</p>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg" data-aos="fade-up" data-aos-delay="250">
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">How long is the term for elected officials?</h3>
+                    <p class="text-gray-600">Scholar Council members serve for one academic year, from the inauguration ceremony until the next election season.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="header-bg text-white py-20 px-4">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-8" data-aos="zoom-in">Your Vote. Your Voice. Your USIU-Africa.</h2>
+            <p class="text-xl mb-12 md:w-2/3 mx-auto" data-aos="fade-up" data-aos-delay="100">
+                Elections will be held on November 15th, 2023. Every vote counts toward building the USIU-Africa we all deserve.
+            </p>
+            <button class="bg-white text-orange-500 font-bold text-xl py-4 px-10 rounded-full hover:bg-gray-100 transition duration-300 transform hover:scale-105" data-aos="fade-up" data-aos-delay="200">
+                Register to Vote Now <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 md:px-12">
+            <h2 class="text-3xl font-bold text-center mb-12 gradient-text inline-block" data-aos="fade-up">Get in Touch</h2>
+            
+            <div class="flex flex-wrap -mx-4">
+                <div class="w-full md:w-1/2 px-4 mb-8 md:mb-0" data-aos="fade-right">
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold mb-6 text-gray-800">Contact the Election Commission</h3>
+                        <form>
+                            <div class="mb-4">
+                                <label for="name" class="block text-gray-700 mb-2">Your Name</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-gray-700 mb-2">Email Address</label>
+                                <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-gray-700 mb-2">Your Message</label>
+                                <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"></textarea>
+                            </div>
+                            <button type="submit" class="btn-vote w-full text-white font-bold py-3 px-8 rounded-lg">
+                                Send Message <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/2 px-4" data-aos="fade-left">
+                    <div class="bg-white p-8 rounded-lg shadow-md h-full flex flex-col">
+                        <h3 class="text-2xl font-semibold mb-6 text-gray-800">Election Information</h3>
+                        
+                        <div class="space-y-6 flex-grow">
+                            <div class="flex items-start">
+                                <div class="bg-orange-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-map-marker-alt text-orange-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Election Office</h4>
+                                    <p class="text-gray-600">Student Center, Room 205<br>USIU-Africa Campus, Nairobi, Kenya</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-orange-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-clock text-orange-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Office Hours</h4>
+                                    <p class="text-gray-600">Monday - Friday: 9AM - 4PM<br>Saturday: 10AM - 2PM (Campaign Period Only)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-orange-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-envelope text-orange-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Email</h4>
+                                    <p class="text-gray-600">elections@usiu.ac.ke</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-orange-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-phone text-orange-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Phone</h4>
+                                    <p class="text-gray-600">+254 (0) 730 116 XXX</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-semibold text-gray-700 mb-4">Follow the Campaign</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 transition duration-300 social-icon">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="bg-blue-400 text-white p-3 rounded-full hover:bg-blue-500 transition duration-300 social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-full hover:from-purple-600 hover:to-pink-600 transition duration-300 social-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition duration-300 social-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -403,34 +1372,224 @@
                     <h3 class="text-xl font-bold mb-4">USIU-Africa</h3>
                     <p class="text-gray-400">United States International University - Africa</p>
                     <p class="text-gray-400">Nairobi, Kenya</p>
+                    <div class="mt-6">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="USIU Campus" class="rounded-lg w-full max-w-xs">
+                    </div>
                 </div>
                 <div class="w-full md:w-1/3 mb-8 md:mb-0">
-                    <h3 class="text-xl font-bold mb-4">Contact Us</h3>
-                    <p class="text-gray-400"><i class="fas fa-envelope mr-2"></i> elections@usiu.ac.ke</p>
-                    <p class="text-gray-400"><i class="fas fa-phone mr-2"></i> +254 (0) 730 116 000</p>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition duration-300"><i class="fas fa-angle-right mr-2"></i>Home</a></li>
+                        <li><a href="#candidates" class="text-gray-400 hover:text-white transition duration-300"><i class="fas fa-angle-right mr-2"></i>Candidates</a></li>
+                        <li><a href="#timeline" class="text-gray-400 hover:text-white transition duration-300"><i class="fas fa-angle-right mr-2"></i>Timeline</a></li>
+                        <li><a href="#vote" class="text-gray-400 hover:text-white transition duration-300"><i class="fas fa-angle-right mr-2"></i>Vote</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition duration-300"><i class="fas fa-angle-right mr-2"></i>Contact</a></li>
+                        <li><a href="https://www.usiu.ac.ke" target="_blank" class="text-gray-400 hover:text-white transition duration-300"><i class="fas fa-angle-right mr-2"></i>USIU Official Website</a></li>
+                    </ul>
                 </div>
                 <div class="w-full md:w-1/3">
+                    <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-envelope mr-2"></i> elections@usiu.ac.ke</p>
+                    <p class="text-gray-400 mb-6"><i class="fas fa-phone mr-2"></i> +254 (0) 730 116 000</p>
+                    
                     <h3 class="text-xl font-bold mb-4">Follow Us</h3>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
+                        <a href="#" class="text-gray-400 hover:text-white social-icon">
                             <i class="fab fa-facebook-f fa-lg"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
+                        <a href="#" class="text-gray-400 hover:text-white social-icon">
                             <i class="fab fa-twitter fa-lg"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
+                        <a href="#" class="text-gray-400 hover:text-white social-icon">
                             <i class="fab fa-instagram fa-lg"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
+                        <a href="#" class="text-gray-400 hover:text-white social-icon">
                             <i class="fab fa-linkedin-in fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white social-icon">
+                            <i class="fab fa-youtube fa-lg"></i>
                         </a>
                     </div>
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
                 <p>&copy; 2023 USIU-Africa Scholar Council Elections. All Rights Reserved.</p>
+                <p class="mt-2">Website developed with <i class="fas fa-heart text-red-500"></i> by <span class="font-semibold">IRANZI INNOCENT</span></p>
             </div>
         </div>
     </footer>
+
+    <!-- AOS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    
+    <!-- Main Script -->
+    <script>
+        // Initialize AOS animations
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Progress bar
+            window.onscroll = function() {
+                progressBar();
+                scrollToTopButton();
+            };
+            
+            // Mobile menu toggle
+            const menuButton = document.querySelector('button.md\\:hidden');
+            const closeButton = document.querySelector('#mobileNav button');
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileLinks = document.querySelectorAll('#mobileNav a');
+            
+            if (menuButton && closeButton && mobileNav) {
+                menuButton.addEventListener('click', function() {
+                    mobileNav.classList.remove('hidden');
+                    mobileNav.classList.add('flex');
+                });
+                
+                closeButton.addEventListener('click', function() {
+                    mobileNav.classList.add('hidden');
+                    mobileNav.classList.remove('flex');
+                });
+                
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileNav.classList.add('hidden');
+                        mobileNav.classList.remove('flex');
+                    });
+                });
+            }
+            
+            // Scroll to top button click
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            if (scrollToTopBtn) {
+                scrollToTopBtn.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+        
+        // Progress bar function
+        function progressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        }
+        
+        // Show/hide scroll to top button
+        function scrollToTopButton() {
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                scrollToTopBtn.classList.add('active');
+            } else {
+                scrollToTopBtn.classList.remove('active');
+            }
+        }
+        
+        // Voting function with animation
+        function vote(candidateId) {
+            const voteCount = document.getElementById(candidateId);
+            let currentVotes = parseInt(voteCount.innerText);
+            
+            // Add confetti effect
+            createConfetti();
+            
+            // Animate vote count
+            const targetVotes = currentVotes + 1;
+            animateCount(voteCount, currentVotes, targetVotes);
+            
+            // Disable button temporarily (to prevent spam)
+            const button = event.currentTarget;
+            button.disabled = true;
+            button.classList.add('opacity-50');
+            button.innerText = "Thank You!";
+            
+            setTimeout(() => {
+                button.disabled = false;
+                button.classList.remove('opacity-50');
+                button.innerHTML = `Vote for ${button.innerText.split(' ')[2]} <i class="fas fa-vote-yea ml-2"></i>`;
+            }, 3000);
+        }
+        
+        // Animate count function
+        function animateCount(element, start, end) {
+            let current = start;
+            const increment = 1;
+            const duration = 1000; // ms
+            const steps = 10;
+            const stepTime = duration / steps;
+            
+            const timer = setInterval(function() {
+                current += increment;
+                element.textContent = current;
+                
+                if (current >= end) {
+                    clearInterval(timer);
+                    element.classList.add('scale-125');
+                    setTimeout(() => {
+                        element.classList.remove('scale-125');
+                    }, 300);
+                }
+            }, stepTime);
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const confettiCount = 100;
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '100%';
+            container.style.height = '100%';
+            container.style.pointerEvents = 'none';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.background = getRandomColor();
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = -20 + 'px';
+                confetti.style.opacity = Math.random() + 0.5;
+                confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+                container.appendChild(confetti);
+                
+                const animation = confetti.animate([
+                    { transform: 'translate3d(0,0,0) rotate(' + Math.random() * 360 + 'deg)', opacity: 1 },
+                    { transform: 'translate3d(' + (Math.random() * 100 - 50) + 'px,' + window.innerHeight + 'px,0) rotate(' + Math.random() * 360 + 'deg)', opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0, .9, .57, 1)',
+                    delay: Math.random() * 1000
+                });
+                
+                animation.onfinish = function() {
+                    confetti.remove();
+                    if (container.children.length === 0) {
+                        container.remove();
+                    }
+                };
+            }
+        }
+        
+        function getRandomColor() {
+            const colors = [
+                '#ff7f00', '#ff5500', '#9333ea', '#22c55e', 
+                '#3b82f6', '#ec4899', '#eab308', '#ef4444'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    </script>
 </body>
 </html>
